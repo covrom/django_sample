@@ -1,8 +1,8 @@
-from django.shortcuts import render
-from django.http import HttpResponse
-from django.template import loader
 from django.shortcuts import render, get_object_or_404
-from .models import Question
+from django.http import HttpResponse, HttpResponseRedirect
+from django.template import loader
+from django.urls import reverse
+from .models import Question,Choice
 
 def index(request):
     #pylint: disable=no-member
@@ -30,7 +30,7 @@ def vote(request, question_id):
         selected_choice = question.choice_set.get(pk=request.POST['choice'])
     except (KeyError, Choice.DoesNotExist):
         #снова покажем форму голосования
-        return render(request,'polls/details.html',{
+        return render(request,'polls/detail.html',{
             'question':question,
             'error_message':"Вы не отметили пункт",
         })
