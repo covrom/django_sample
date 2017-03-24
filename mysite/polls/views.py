@@ -3,6 +3,7 @@ from django.http import HttpResponse, HttpResponseRedirect
 from django.template import loader
 from django.urls import reverse
 from .models import Question,Choice
+from django.views import generic
 
 def index(request):
     #pylint: disable=no-member
@@ -40,3 +41,18 @@ def vote(request, question_id):
         #всегда возвращаем HttpResponseRedirect после корректной обработки POST запроса
         #это защитит от двойной записи данных, если пользователь вернулся назад
         return HttpResponseRedirect(reverse('polls:results', args=(question.id,)))
+
+class IndexView(generic.ListView):
+    template_name = 'polls/index.html'
+    context_object_name = 'latest_question_list'
+    def get_queryset(self):
+        """последние 5 вопросов"""
+        return Question.objects.order_by('-pub_date')[:5]
+
+class DetailView(generic.DetailView):
+    model = Question
+    template_name = 'polls/detail.html'
+
+class ResultsView(generic.DetailView):
+    model = Question
+    template_name = 'polls/results.html'
