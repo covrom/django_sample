@@ -37,6 +37,6 @@ def vote(request, question_id):
     else:
         selected_choice.votes += 1
         selected_choice.save()
-        #всегда возвращаем HttpResponseRedirect после корректной обработки POS запроса
+        #всегда возвращаем HttpResponseRedirect после корректной обработки POST запроса
         #это защитит от двойной записи данных, если пользователь вернулся назад
         return HttpResponseRedirect(reverse('polls:results', args=(question.id,)))
