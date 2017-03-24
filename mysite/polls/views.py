@@ -25,4 +25,18 @@ def results(request, question_id):
     return HttpResponse(response % question_id)
 
 def vote(request, question_id):
-    return HttpResponse('Вы голосуете по вопросу %s.' % question_id)
+    question = get_object_or_404(Question,pk=question_id)
+    try:
+        selected_choice = question.choice_set.get(pk=request.POST['choice'])
+    except (KeyError, Choice.DoesNotExist):
+        #снова покажем форму голосования
+        return render(request,'polls/details.html',{
+            'question':question,
+            'error_message':"Вы не отметили пункт",
+        })
+    else:
+        selected_choice.votes += 1
+        selected_choice.save()
+        #всегда возвращаем HttpResponseRedirect после корректной обработки POS запроса
+        #это защитит от двойной записи данных, если пользователь вернулся назад
+        return HttpResponseRedirect(reverse('polls:results', args=(question.id,)))
