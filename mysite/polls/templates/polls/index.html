@@ -1,17 +1,49 @@
 {% load static %}
 
-{% include 'material/includes/material_css.html' %}
-    <script src="{% static 'material/js/jquery-2.2.0.js' %}"></script>
-{% include 'material/includes/material_js.html' %}
+<link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+<link rel="stylesheet" href="https://code.getmdl.io/1.3.0/material.indigo-pink.min.css">
+<script defer src="https://code.getmdl.io/1.3.0/material.min.js"></script>
 
-<link rel="stylesheet" type="text/css" href="{% static 'polls/style.css' %}" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
+<!--<link rel="stylesheet" type="text/css" href="{% static 'polls/style.css' %}" />-->
+<style>
+.demo-list-action {
+  width: 300px;
+}
+</style>
+
+<h1>Приложуха в стиле material design</h1>
 {% if latest_question_list %}
-<ul>
+
+<div class="demo-list-action mdl-list">
+{% for question in latest_question_list %}
+  <div class="mdl-list__item">
+    <span class="mdl-list__item-primary-content">
+      <i class="material-icons mdl-list__item-avatar">help_outline</i>
+ <a class="mdl-list__item-secondary-action" href="{% url 'polls:detail' question.id %}">
+     <!--<i class="material-icons">input</i>-->
+      <span>{{question.question_text}}</span>
+     </a>   
+    </span>
+    
+  </div>
+{%endfor%}
+</div>
+
+
+<!--<ul class="demo-list-action mdl-list">
     {% for question in latest_question_list %}
-    <li><a href="{% url 'polls:detail' question.id %}">{{question.question_text}}</a></li>
+    <li class="mdl-list__item">
+         <span class="mdl-list__item-primary-content">
+            <i class="material-icons mdl-list__item-icon">help_outline</i>
+            {{question.question_text}}
+            <a class="mdl-list__item-secondary-action" href="{% url 'polls:detail' question.id %}"><i class="material-icons">input</i></a>
+        </span>
+    </li>
     {%endfor%}
-</ul>
+</ul>-->
+
 {%else%}
 <p>Нет ни одного вопроса.</p>
 {%endif%}
